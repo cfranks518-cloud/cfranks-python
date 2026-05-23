@@ -1,0 +1,880 @@
+<!--
+  Python Academy — Learn Python for the AI Era
+  © Carlton Franks | cfranks518@gmail.com
+  https://www.linkedin.com/in/carlton-franks-0ba56974/
+  All rights reserved.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python Academy — Learn Python for the AI Era</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#070b12;--bg1:#0c1118;--bg2:#111820;--bg3:#161d2a;
+  --green:#00e676;--cyan:#29b6f6;--amber:#ffb300;--red:#ef5350;--purple:#ce93d8;
+  --text:#dde4f0;--text2:#7e8ea4;--text3:#3d4a5c;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.11);
+  --r:10px;--font:'Outfit',sans-serif;--mono:'JetBrains Mono',monospace;
+}
+html{font-size:32px;scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* HEADER */
+.hdr{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(7,11,18,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:80px;display:flex;align-items:center;padding:0 1.25rem;gap:1rem}
+.logo{font-size:1.05rem;font-weight:800;display:flex;align-items:center;gap:0.5rem;white-space:nowrap}
+.logo-snake{font-size:1.2rem}
+.logo-text{background:linear-gradient(90deg,var(--green) 0%,var(--cyan) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hdr-sub{font-size:0.72rem;color:var(--text3);font-weight:500;letter-spacing:0.03em}
+.hdr-right{margin-left:auto;display:flex;align-items:center;gap:0.85rem}
+.lesson-ctr{font-size:0.75rem;color:var(--text2);white-space:nowrap;font-weight:500}
+.prog-wrap{width:160px}
+.prog-track{height:3px;background:var(--bg3);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--cyan));border-radius:2px;transition:width 0.5s cubic-bezier(.4,0,.2,1);width:0%}
+
+/* LAYOUT */
+.app{display:flex;padding-top:80px;min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{width:300px;min-width:300px;background:var(--bg1);border-right:1px solid var(--border);height:calc(100vh - 80px);position:fixed;top:80px;overflow-y:auto;padding:1.25rem 0}
+.sb-title{padding:0 1.1rem 0.6rem;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--text3)}
+.sb-item{display:flex;align-items:center;gap:0.65rem;padding:0.55rem 1.1rem;cursor:pointer;border-left:2px solid transparent;transition:all 0.18s;position:relative}
+.sb-item:hover{background:var(--bg2)}
+.sb-item.active{background:var(--bg2);border-left-color:var(--green)}
+.sb-num{width:36px;height:36px;min-width:36px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:0.68rem;font-weight:700;color:var(--text2);transition:all 0.2s;font-family:var(--mono)}
+.sb-item.active .sb-num,.sb-item.done .sb-num{background:var(--green);color:#000}
+.sb-label{font-size:0.8rem;color:var(--text2);transition:color 0.18s;line-height:1.3}
+.sb-item.active .sb-label{color:var(--text);font-weight:500}
+.sb-check{margin-left:auto;color:var(--green);font-size:0.75rem;opacity:0;transition:opacity 0.2s}
+.sb-item.done .sb-check{opacity:1}
+
+/* MAIN */
+.main{margin-left:300px;flex:1;padding:2rem 2.5rem;max-width:calc(100% - 300px)}
+.l-wrap{max-width:820px}
+
+/* LESSON HEADER */
+.l-hdr{margin-bottom:1.75rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
+.l-tag{display:inline-flex;align-items:center;gap:0.4rem;padding:0.2rem 0.7rem;border-radius:20px;font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;background:rgba(0,230,118,0.08);color:var(--green);border:1px solid rgba(0,230,118,0.18);margin-bottom:0.7rem}
+.l-title{font-size:1.9rem;font-weight:800;line-height:1.2;margin-bottom:0.4rem;letter-spacing:-0.02em}
+.l-sub{color:var(--text2);font-size:0.95rem;line-height:1.5}
+
+/* SECTIONS */
+.sec{margin-bottom:1.75rem}
+.sec-title{font-size:0.67rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--text3);margin-bottom:0.85rem;display:flex;align-items:center;gap:0.6rem}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* CONCEPT */
+.concept{background:var(--bg1);border:1px solid var(--border);border-radius:var(--r);padding:1.4rem 1.5rem;font-size:0.9rem;color:var(--text2);line-height:1.85}
+.concept p{margin-bottom:0.7rem}
+.concept p:last-child{margin-bottom:0}
+.concept strong{color:var(--text);font-weight:600}
+.concept code{font-family:var(--mono);background:rgba(255,255,255,0.06);padding:0.1em 0.4em;border-radius:4px;font-size:0.83em;color:var(--cyan)}
+.concept ul{margin:0.4rem 0 0.7rem 1.2rem}
+.concept li{margin-bottom:0.3rem}
+
+/* AI CALLOUT */
+.ai-call{background:rgba(41,182,246,0.05);border:1px solid rgba(41,182,246,0.13);border-left:3px solid var(--cyan);border-radius:var(--r);padding:0.9rem 1.1rem;margin-top:1rem}
+.ai-call-ttl{color:var(--cyan);font-weight:700;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.35rem}
+.ai-call p{color:var(--text2);font-size:0.85rem;line-height:1.6}
+
+/* EDITOR */
+.ed-box{background:var(--bg1);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.ed-bar{display:flex;align-items:center;gap:0.45rem;padding:0.55rem 1rem;background:var(--bg2);border-bottom:1px solid var(--border)}
+.ed-dots{display:flex;gap:5px}
+.dot{width:10px;height:10px;border-radius:50%}
+.dr{background:#ff5f57}.dy{background:#ffbd2e}.dg{background:#28c840}
+.ed-file{font-family:var(--mono);font-size:0.72rem;color:var(--text3);margin-left:0.4rem}
+.run-btn{margin-left:auto;background:var(--green);color:#000;border:none;border-radius:6px;padding:0.32rem 0.9rem;font-family:var(--font);font-size:0.8rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:0.35rem;transition:all 0.15s;letter-spacing:0.01em}
+.run-btn:hover{background:#00ff8c;transform:translateY(-1px)}
+.run-btn:active{transform:translateY(0) scale(0.98)}
+.run-btn.busy{background:var(--amber);pointer-events:none}
+.ed-ta{width:100%;background:#060b11;border:none;outline:none;color:#c8d6e8;font-family:var(--mono);font-size:0.85rem;line-height:1.75;padding:1.1rem 1.25rem;resize:vertical;min-height:190px;tab-size:4;-moz-tab-size:4}
+.out-box{border-top:1px solid var(--border);padding:0.85rem 1.25rem;background:rgba(0,0,0,0.25);min-height:54px}
+.out-lbl{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);margin-bottom:0.4rem}
+.out-txt{font-family:var(--mono);font-size:0.83rem;line-height:1.7;white-space:pre-wrap;color:var(--green);min-height:22px}
+.out-txt.err{color:var(--red)}
+.out-txt.empty{color:var(--text3);font-style:italic;font-family:var(--font);font-size:0.82rem}
+
+/* CHALLENGE */
+.chal{background:rgba(255,179,0,0.04);border:1px solid rgba(255,179,0,0.11);border-left:3px solid var(--amber);border-radius:var(--r);padding:1.1rem 1.25rem}
+.chal-hdr{display:flex;align-items:center;gap:0.45rem;margin-bottom:0.5rem;font-weight:700;font-size:0.85rem;color:var(--amber)}
+.chal-txt{color:var(--text2);font-size:0.875rem;line-height:1.65}
+
+/* INTERVIEW BOX */
+.iv-box{background:rgba(0,230,118,0.03);border:1px solid rgba(0,230,118,0.09);border-radius:var(--r);padding:1.1rem 1.25rem}
+.iv-hdr{display:flex;align-items:center;gap:0.45rem;margin-bottom:0.75rem;font-weight:700;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--green)}
+.iv-list{list-style:none;padding:0}
+.iv-list li{display:flex;gap:0.5rem;align-items:flex-start;font-size:0.85rem;color:var(--text2);margin-bottom:0.45rem;line-height:1.55}
+.iv-list li::before{content:'→';color:var(--green);flex-shrink:0;font-weight:700;margin-top:0.05em}
+
+/* QUIZ */
+.quiz-box{background:var(--bg1);border:1px solid var(--border);border-radius:var(--r);padding:1.4rem}
+.quiz-q{font-size:0.93rem;font-weight:600;margin-bottom:1rem;line-height:1.5;color:var(--text)}
+.quiz-opts{display:flex;flex-direction:column;gap:0.45rem}
+.q-opt{padding:0.6rem 1rem;border:1px solid var(--border2);border-radius:8px;cursor:pointer;font-size:0.85rem;color:var(--text2);transition:all 0.15s;background:var(--bg2);text-align:left;font-family:var(--font);width:100%}
+.q-opt:hover:not(:disabled){border-color:var(--cyan);color:var(--text);background:rgba(41,182,246,0.05)}
+.q-opt.correct{border-color:var(--green);background:rgba(0,230,118,0.07);color:var(--green);font-weight:500}
+.q-opt.wrong{border-color:var(--red);background:rgba(239,83,80,0.07);color:var(--red)}
+.quiz-explain{margin-top:0.7rem;padding:0.75rem;background:var(--bg2);border-radius:8px;font-size:0.83rem;color:var(--text2);line-height:1.55;display:none}
+.quiz-explain.show{display:block}
+
+/* NAV */
+.l-nav{display:flex;gap:0.7rem;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border)}
+.btn-p,.btn-n{padding:0.6rem 1.35rem;border-radius:8px;font-family:var(--font);font-size:0.85rem;font-weight:600;cursor:pointer;transition:all 0.15s}
+.btn-p{background:var(--bg2);color:var(--text2);border:1px solid var(--border2)}
+.btn-p:hover{color:var(--text);border-color:var(--text3)}
+.btn-n{background:var(--green);color:#000;border:none;margin-left:auto}
+.btn-n:hover{background:#00ff8c;transform:translateY(-1px)}
+
+/* COMPLETION */
+.done-wrap{padding:2.5rem 0;text-align:center}
+.done-emoji{font-size:3.5rem;margin-bottom:1rem;display:block}
+.done-title{font-size:2rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:0.5rem}
+.done-sub{color:var(--text2);line-height:1.7;max-width:480px;margin:0 auto 1.75rem;font-size:0.93rem}
+.done-links{display:flex;flex-wrap:wrap;gap:0.65rem;justify-content:center;margin-top:1.25rem}
+.done-btn{padding:0.6rem 1.25rem;border-radius:8px;font-size:0.85rem;font-weight:600;cursor:pointer;text-decoration:none;transition:all 0.15s;border:none;font-family:var(--font);display:inline-flex;align-items:center;gap:0.35rem}
+.done-btn.pri{background:var(--green);color:#000}
+.done-btn.sec{background:var(--bg2);color:var(--text);border:1px solid var(--border2)}
+.done-btn:hover{transform:translateY(-1px)}
+
+/* MOBILE */
+.mob-nav{display:none}
+@media(max-width:780px){
+  .sidebar{display:none}
+  .main{margin-left:0;padding:1rem 1.1rem;max-width:100%}
+  .l-title{font-size:1.45rem}
+  .hdr-sub,.prog-wrap{display:none}
+  .mob-nav{display:flex;overflow-x:auto;gap:0.4rem;padding:0.65rem 1rem;background:var(--bg1);border-bottom:1px solid var(--border);position:sticky;top:80px;z-index:90;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .mob-nav::-webkit-scrollbar{display:none}
+  .mob-item{flex-shrink:0;padding:0.3rem 0.7rem;border-radius:20px;font-size:0.72rem;font-weight:600;background:var(--bg2);color:var(--text2);border:1px solid var(--border);cursor:pointer;transition:all 0.15s;white-space:nowrap}
+  .mob-item.active{background:var(--green);color:#000;border-color:transparent}
+}
+/* FOOTER */
+.footer{margin-left:300px;padding:1.5rem 2.5rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem}
+.footer-brand{font-size:0.6rem;font-weight:700;letter-spacing:0.06em;color:var(--text3)}
+.footer-copy{font-size:0.55rem;color:var(--text3);text-align:right}
+.footer-copy a{color:var(--green);text-decoration:none;font-weight:600}
+.footer-copy a:hover{text-decoration:underline}
+@media(max-width:780px){.footer{margin-left:0;padding:1rem 1.1rem;flex-direction:column;align-items:flex-start}.footer-copy{text-align:left}}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--bg3);border-radius:2px}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="logo">
+    <span class="logo-snake">🐍</span>
+    <span class="logo-text">Python Academy</span>
+  </div>
+  <span class="hdr-sub">Learn Python for the AI Era</span>
+  <div class="hdr-right">
+    <span class="lesson-ctr" id="lCtr">1 / 10</span>
+    <div class="prog-wrap">
+      <div class="prog-track"><div class="prog-fill" id="pFill"></div></div>
+    </div>
+  </div>
+</header>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="mob-nav" id="mobNav"></div>
+  <main class="main"><div class="l-wrap" id="mainContent"></div></main>
+</div>
+
+<script>
+const LESSONS = [
+{
+  id:0,title:"Hello, Python!",sub:"Write your very first line of code",tag:"Lesson 1 — Getting Started",
+  concept:`<p><strong>Python</strong> is a programming language that reads almost like plain English. It's the most popular language in the world for data science, automation, and AI — and the primary language behind every major AI system you use today.</p>
+<p>The simplest thing you can do is display text with <code>print()</code>. A <strong>function</strong> is a reusable command. You pass information inside the parentheses and it does something useful.</p>
+<p>Lines starting with <code>#</code> are <strong>comments</strong> — Python ignores them completely. They exist for humans reading the code.</p>
+<div class="ai-call"><div class="ai-call-ttl">🤖 Why This Matters for AI</div><p>Every AI script starts with print statements for debugging. When you work with AI APIs like Anthropic or OpenAI, <code>print()</code> is how you inspect model outputs, log progress, and display results to users.</p></div>`,
+  code:`# This is a comment — Python ignores it
+# The print() function displays text
+
+print("Hello, World!")
+print("My name is Carlton")
+print("I am learning Python for AI!")
+
+# You can print numbers too
+print(2025)
+
+# Mixing text and numbers
+print("Python version:", 3.12)
+print("Number of AI tools I use:", 10)`,
+  chal:`Change the second print statement to your real name. Then add a 4th print line that displays your job title. Try running it!`,
+  iv:["Python is the #1 language for AI/ML — mention this when explaining why you chose it","print() is a built-in function — Python ships with dozens of these ready to use","Python code runs top-to-bottom, one line at a time (sequential execution)","Python 3 is current — Python 2 is obsolete. Knowing this shows awareness"],
+  quiz:{q:"What does the # symbol do in Python?",opts:["Multiplies two numbers","Marks the start of a comment","Prints text to the screen","Creates a variable"],c:1,x:"# starts a comment. Python completely ignores everything on that line after #. Comments are notes for humans reading the code — they have no effect on program execution."}
+},
+{
+  id:1,title:"Variables & Data Types",sub:"Storing and labeling information",tag:"Lesson 2 — Core Concepts",
+  concept:`<p>A <strong>variable</strong> is a named container that holds data. Create one with a simple <code>name = value</code> assignment. No need to declare the type beforehand — Python figures it out automatically (this is called <strong>dynamic typing</strong>).</p>
+<p>Python's four core data types:</p>
+<ul>
+  <li><code>str</code> — text, always in quotes: <code>"hello"</code></li>
+  <li><code>int</code> — whole numbers: <code>42</code></li>
+  <li><code>float</code> — decimal numbers: <code>3.14</code></li>
+  <li><code>bool</code> — True or False (capital T and F — this matters!)</li>
+</ul>
+<p>Use <code>type()</code> to inspect what type a variable holds.</p>
+<div class="ai-call"><div class="ai-call-ttl">🤖 Why This Matters for AI</div><p>Variables hold everything in AI code: user prompts (str), token counts (int), confidence scores (float), and feature flags (bool). When an AI API returns a response, you store it in a variable and work with it from there.</p></div>`,
+  code:`# Creating variables — no type declaration needed!
+name = "Carlton"
+age = 30
+height = 5.11
+uses_ai_daily = True
+
+# Printing variables
+print("Name:", name)
+print("Age:", age)
+print("Height:", height)
+print("Uses AI daily?", uses_ai_daily)
+
+# type() shows what kind of data it is
+print(type(name))       # <class 'str'>
+print(type(age))        # <class 'int'>
+print(type(height))     # <class 'float'>
+print(type(uses_ai_daily))  # <class 'bool'>
+
+# Python figures out the type for you
+years_exp = 5
+hourly_rate = 87.50
+is_available = False
+print(years_exp, hourly_rate, is_available)`,
+  chal:`Create 4 variables that describe you professionally: your name (str), years of experience (int), expected salary (float), and whether you've used AI tools (bool). Print them all with descriptive labels.`,
+  iv:["Python is dynamically typed — no need to declare int x = 5 like Java or C#","Variable names use snake_case by convention: first_name, not firstName or FirstName","bool values must be capitalized: True/False — lowercase 'true' is a bug","type() is excellent for debugging — shows you exactly what kind of data you're working with"],
+  quiz:{q:"Which of these is a valid Python boolean value?",opts:["true","TRUE","True","1.0"],c:2,x:"Python booleans must be exactly True or False with capital first letters. 'true' (lowercase) would be treated as a variable name, not a boolean, causing a NameError."}
+},
+{
+  id:2,title:"String Magic",sub:"Manipulating text like a pro",tag:"Lesson 3 — Strings",
+  concept:`<p>Strings are sequences of characters. Python gives you powerful built-in tools to work with them:</p>
+<ul>
+  <li><strong>f-strings</strong>: embed variables directly — <code>f"Hello {name}!"</code> (Python 3.6+)</li>
+  <li><code>.upper()</code> / <code>.lower()</code> / <code>.title()</code>: change case</li>
+  <li><code>len()</code>: count characters</li>
+  <li><code>.replace(old, new)</code>: swap text</li>
+  <li><code>.split()</code>: break string into a list of words</li>
+  <li><code>.strip()</code>: remove leading/trailing whitespace</li>
+</ul>
+<p><strong>Slicing</strong>: <code>text[0:3]</code> gets characters 0, 1, 2. Indexing starts at <strong>0</strong>!</p>
+<div class="ai-call"><div class="ai-call-ttl">🤖 Why This Matters for AI</div><p>Prompt engineering is literally crafting strings. Parsing AI responses, cleaning user input, formatting outputs — it's all string manipulation. Every call to an AI API involves building and processing strings.</p></div>`,
+  code:`# f-strings: the modern way to format text
+name = "Carlton"
+role = "AI Specialist"
+years = 5
+
+bio = f"Hi, I'm {name}, a {role} with {years} years of experience."
+print(bio)
+
+# String methods
+job = "generative ai engineer"
+print(job.upper())        # ALL CAPS
+print(job.title())        # Title Case
+print(job.capitalize())   # First letter only
+
+# Length and indexing
+word = "Python"
+print("Length:", len(word))       # 6
+print("First:", word[0])          # P
+print("Last:", word[-1])          # n
+print("First 3:", word[0:3])      # Pyt
+print("Last 3:", word[3:])        # hon
+
+# Replace and split
+text = "I use JavaScript for everything"
+updated = text.replace("JavaScript", "Python")
+print(updated)
+
+words = updated.split()
+print(words)
+print("Word count:", len(words))`,
+  chal:`Create an f-string that formats a professional LinkedIn headline using at least 3 variables (name, role, company). Then print: the headline length, the headline in uppercase, and count how many words it has using .split().`,
+  iv:["f-strings (formatted string literals) arrived in Python 3.6 — the modern standard","Strings are immutable — methods return NEW strings, they don't modify the original","Negative indexing: text[-1] is last character, text[-2] is second-to-last","str.strip() removes whitespace — critical for cleaning user input in real apps"],
+  quiz:{q:"What does word[0] return if word = \"Python\"?",opts:["1","P","Python","IndexError"],c:1,x:"Python uses zero-based indexing. The first character is at index 0. So word[0] = 'P', word[1] = 'y', word[2] = 't', and so on."}
+},
+{
+  id:3,title:"Numbers & Math",sub:"Python as your calculator",tag:"Lesson 4 — Numbers",
+  concept:`<p>Python handles math intuitively. Key operators:</p>
+<ul>
+  <li><code>+</code> add &nbsp; <code>-</code> subtract &nbsp; <code>*</code> multiply &nbsp; <code>/</code> divide</li>
+  <li><code>//</code> floor division (drops decimal): <code>7 // 2 = 3</code></li>
+  <li><code>%</code> modulo (remainder): <code>7 % 2 = 1</code></li>
+  <li><code>**</code> exponent: <code>2 ** 10 = 1024</code></li>
+</ul>
+<p>Handy built-ins: <code>round()</code>, <code>abs()</code>, <code>max()</code>, <code>min()</code>, <code>sum()</code>, <code>int()</code>, <code>float()</code>.</p>
+<p>For advanced math: <code>import math</code> gives you <code>math.sqrt()</code>, <code>math.pi</code>, <code>math.ceil()</code>.</p>
+<div class="ai-call"><div class="ai-call-ttl">🤖 Why This Matters for AI</div><p>AI models run on math — vectors, probabilities, loss functions. Understanding Python math operations prepares you for NumPy, which powers neural networks. Token counts, temperature settings, and confidence scores in AI APIs are all numbers.</p></div>`,
+  code:`# Basic operators
+print(10 + 3)    # 13  — add
+print(10 - 3)    # 7   — subtract
+print(10 * 3)    # 30  — multiply
+print(10 / 3)    # 3.333... — divide
+print(10 // 3)   # 3   — floor division (drops decimal)
+print(10 % 3)    # 1   — modulo (remainder)
+print(2 ** 8)    # 256 — exponent (2 to the power of 8)
+
+# Real example: salary calculator
+annual = 95000
+monthly = annual / 12
+daily = annual / 365
+
+print(f"Monthly: \${round(monthly, 2)}")
+print(f"Daily: \${round(daily, 2)}")
+
+# Useful functions
+scores = [85, 92, 78, 95, 88, 90]
+print(f"Best: {max(scores)}")
+print(f"Worst: {min(scores)}")
+print(f"Average: {round(sum(scores) / len(scores), 1)}")
+
+# Math module
+import math
+print(f"Square root of 144: {math.sqrt(144)}")
+print(f"Pi: {round(math.pi, 5)}")`,
+  chal:`Write a compound interest calculator. Variables: principal = 10000, rate = 0.07 (7%), years = 10. Formula: final = principal * (1 + rate) ** years. Print the final amount rounded to 2 decimal places.`,
+  iv:["// is integer/floor division: 7 // 2 = 3 (not 3.5) — common interview question","% (modulo) gives the remainder — n % 2 == 0 checks if n is even","** is the exponent operator: 2**10 = 1024 — comes up in technical interviews","import math unlocks advanced math: sqrt, ceil, floor, log, pi — key for data work"],
+  quiz:{q:"What is the result of 17 % 5 in Python?",opts:["3","2","3.4","1"],c:1,x:"% is the modulo operator — it returns the remainder after division. 17 ÷ 5 = 3 with remainder 2. So 17 % 5 = 2. This comes up frequently when checking if a number is even (n % 2 == 0)."}
+},
+{
+  id:4,title:"Making Decisions",sub:"if, elif, else — controlling flow",tag:"Lesson 5 — Conditionals",
+  concept:`<p>Conditionals let your code branch based on conditions. The structure:</p>
+<p><code>if condition:</code> → then <code>elif other_condition:</code> → finally <code>else:</code></p>
+<p><strong>Comparison operators:</strong> <code>==</code> equal, <code>!=</code> not equal, <code>&gt;</code> <code>&lt;</code> <code>&gt;=</code> <code>&lt;=</code></p>
+<p><strong>Logical operators:</strong> <code>and</code>, <code>or</code>, <code>not</code></p>
+<p>⚠️ <strong>Indentation is the syntax!</strong> Python uses 4 spaces to define code blocks — there are no curly braces like JavaScript. Wrong indentation = error.</p>
+<div class="ai-call"><div class="ai-call-ttl">🤖 Why This Matters for AI</div><p>AI apps are full of conditionals: if confidence > 0.9 → show result, if input is empty → show error. Content moderation, routing between AI models, fallback logic — all conditionals.</p></div>`,
+  code:`# Simple if / elif / else
+temperature = 72
+
+if temperature > 85:
+    print("Hot — wear a t-shirt!")
+elif temperature > 60:
+    print("Nice — comfortable weather.")
+else:
+    print("Cold — grab a jacket.")
+
+# Multiple conditions
+score = 88
+attendance = 92
+
+if score >= 90 and attendance >= 85:
+    grade = "A"
+elif score >= 75 or attendance >= 95:
+    grade = "B"
+elif score >= 60:
+    grade = "C"
+else:
+    grade = "F"
+
+print(f"Grade: {grade}")
+
+# Real AI pattern: confidence routing
+confidence = 0.85
+
+if confidence >= 0.95:
+    print("High confidence → show result directly")
+elif confidence >= 0.70:
+    print("Medium confidence → show with disclaimer")
+else:
+    print("Low confidence → route to human review")
+
+# Ternary (one-liner)
+status = "Senior" if score >= 85 else "Junior"
+print(f"Status: {status}")`,
+  chal:`Write a hiring screener function: if years_experience >= 5 AND has_python_skill is True, print "Strong candidate". If only one of those conditions is True, print "Consider further". Otherwise, print "Not a match".`,
+  iv:["Python uses elif — not 'else if' like JavaScript/Java. This trips people up!","Indentation IS the syntax — 4 spaces per level, consistent throughout the file","== checks equality, = is assignment. Mixing these causes bugs, not errors","Python ternary: x = 'yes' if condition else 'no' — useful to know, mention it"],
+  quiz:{q:"In Python, what keyword handles additional conditions after an if block?",opts:["else if","elseif","elif","or if"],c:2,x:"Python uses elif (contracted from 'else if'). This differs from JavaScript, Java, and C which use 'else if' (two words). It's a frequent Python-specific interview question."}
+},
+{
+  id:5,title:"Lists",sub:"Ordered collections of data",tag:"Lesson 6 — Collections",
+  concept:`<p>A <strong>list</strong> is an ordered, mutable collection in square brackets: <code>["a", "b", "c"]</code>. Items can be any type, even mixed.</p>
+<p><strong>Essential list operations:</strong></p>
+<ul>
+  <li><code>list[0]</code> — access by index (starts at 0, <code>list[-1]</code> is last)</li>
+  <li><code>list.append(item)</code> — add to end</li>
+  <li><code>list.insert(i, item)</code> — add at position</li>
+  <li><code>list.remove(item)</code> — remove by value</li>
+  <li><code>list.pop()</code> — remove and return last item</li>
+  <li><code>len(list)</code> — count items</li>
+  <li><code>item in list</code> — check membership (returns bool)</li>
+  <li><code>list.sort()</code> — sort in place</li>
+</ul>
+<div class="ai-call"><div class="ai-call-ttl">🤖 Why This Matters for AI</div><p>AI conversation history is a list of messages. Model predictions come back as lists. Dataset rows are lists. When calling the Anthropic or OpenAI API, you pass the conversation as a list of message dicts.</p></div>`,
+  code:`# Creating and accessing lists
+skills = ["Python", "SQL", "Excel", "Prompt Engineering"]
+print(skills)
+print("First:", skills[0])
+print("Last:", skills[-1])
+print("Middle two:", skills[1:3])
+
+# Modifying lists
+skills.append("Machine Learning")
+print("After append:", skills)
+
+skills.remove("Excel")
+print("After remove:", skills)
+
+skills.insert(1, "AI Tools")
+print("After insert:", skills)
+
+# Membership check
+if "Python" in skills:
+    print("Python is in the list!")
+
+print("Total skills:", len(skills))
+
+# AI chat history example (exactly how APIs work)
+history = []
+history.append({"role": "user", "content": "What is Python?"})
+history.append({"role": "assistant", "content": "Python is a high-level language..."})
+history.append({"role": "user", "content": "Why is it popular for AI?"})
+
+print(f"\\nChat has {len(history)} messages")
+print("Latest:", history[-1]["content"][:40])`,
+  chal:`Create a list of your top 5 technical skills. Sort it alphabetically with .sort() and print it. Then: check if "Python" is in the list, print the total count, and print only the first 3 using slicing.`,
+  iv:["Lists are zero-indexed — first item is [0], last is [-1]","Lists are mutable (changeable) — unlike tuples which are immutable (fixed)","append() adds to the end, insert(i, item) adds anywhere — know both","List comprehensions: [x*2 for x in numbers] — powerful Python shorthand, mention these!"],
+  quiz:{q:"If myList = ['a', 'b', 'c'], what does myList[-1] return?",opts:["a","b","c","IndexError"],c:2,x:"Negative indexing counts from the end. -1 is the last item ('c'), -2 is second-to-last ('b'), -3 is the first item ('a'). This is a very common Python pattern."}
+},
+{
+  id:6,title:"Loops",sub:"Automating repetition",tag:"Lesson 7 — Loops",
+  concept:`<p>Loops let you repeat code without copy-pasting.</p>
+<p><strong>for loop</strong> — iterate over any sequence:</p>
+<p style="margin-left:1rem"><code>for item in collection:</code></p>
+<p><strong>range()</strong> — generates numbers: <code>range(5)</code> → 0,1,2,3,4. <code>range(2, 10, 2)</code> → 2,4,6,8</p>
+<p><strong>while loop</strong> — repeats while a condition is True (add a way to stop it!)</p>
+<p><strong>Controls:</strong> <code>break</code> exits the loop, <code>continue</code> skips to the next iteration</p>
+<p><strong>enumerate()</strong> — gives you index AND value together</p>
+<div class="ai-call"><div class="ai-call-ttl">🤖 Why This Matters for AI</div><p>Processing datasets = loops. Sending batch prompts to an AI API = loops. Training a model for N epochs = loops. Nearly every AI pipeline loops over data to process, transform, or aggregate it.</p></div>`,
+  code:`# for loop over a list
+languages = ["Python", "SQL", "JavaScript"]
+for lang in languages:
+    print(f"I know {lang}")
+
+# range(n) gives 0 to n-1
+print("\\nCounting with range:")
+for i in range(5):
+    print(f"  step {i}")
+
+# range(start, stop, step) — only even numbers
+print("\\nEven numbers 0-10:")
+for n in range(0, 11, 2):
+    print(n, end=" ")
+print()
+
+# enumerate() — index AND value
+print("\\nSkills list with numbers:")
+skills = ["Python", "SQL", "AI Tools", "Prompt Eng"]
+for i, skill in enumerate(skills, start=1):
+    print(f"  {i}. {skill}")
+
+# while loop
+attempts = 0
+max_attempts = 3
+while attempts < max_attempts:
+    print(f"  API call attempt {attempts + 1}")
+    attempts += 1
+print("Done!")`,
+  chal:`Write a loop that calculates the sum of all numbers from 1 to 100. Use range(1, 101) and a running total variable starting at 0. Print the final sum (it should be 5050).`,
+  iv:["range(n) gives 0 to n-1 — off-by-one errors are the most common loop bug","enumerate() gives index + value: for i, val in enumerate(list) — use this constantly","zip() combines two lists: for a, b in zip(list1, list2) — very useful pattern","List comprehensions replace simple loops: [x**2 for x in range(10)] — interviewers love these"],
+  quiz:{q:"What sequence does range(3) produce?",opts:["1, 2, 3","0, 1, 2, 3","0, 1, 2","1, 2, 3, 4"],c:2,x:"range(3) produces 0, 1, 2 — exactly 3 values, starting at 0 and stopping BEFORE 3. This zero-based, exclusive-end pattern is consistent with list indexing in Python."}
+},
+{
+  id:7,title:"Functions",sub:"Reusable blocks of code",tag:"Lesson 8 — Functions",
+  concept:`<p>A <strong>function</strong> is a reusable block of code you define once and call as many times as you need. Use <code>def</code> to define it:</p>
+<p style="margin-left:1rem"><code>def function_name(parameters):</code></p>
+<ul>
+  <li><strong>Parameters</strong>: inputs the function accepts</li>
+  <li><strong>return</strong>: sends a value back to the caller (without return, function returns None)</li>
+  <li><strong>Default parameters</strong>: <code>def greet(name="friend")</code> makes them optional</li>
+  <li><strong>Docstrings</strong>: triple-quoted description of what the function does</li>
+</ul>
+<p>Good functions do ONE thing and do it well. This is a core engineering principle.</p>
+<div class="ai-call"><div class="ai-call-ttl">🤖 Why This Matters for AI</div><p>In real AI engineering you write functions like call_claude(prompt, model) or format_output(response). AI APIs also have a "function calling" feature where you define Python functions that AI models can invoke — understanding Python functions unlocks this advanced capability.</p></div>`,
+  code:`# Basic function with a parameter
+def greet(name):
+    return f"Hello, {name}! Welcome to Python."
+
+result = greet("Carlton")
+print(result)
+print(greet("Alice"))  # reusable!
+
+# Default parameter (makes it optional)
+def describe_role(name, role="Developer", company="TechCorp"):
+    return f"{name} — {role} at {company}"
+
+print(describe_role("Bob"))
+print(describe_role("Carol", "AI Engineer", "Anthropic"))
+
+# Function returning multiple values
+def analyze_scores(numbers):
+    """Calculate min, max, and average of a list."""
+    return min(numbers), max(numbers), round(sum(numbers)/len(numbers), 1)
+
+scores = [88, 92, 75, 95, 83, 91]
+low, high, avg = analyze_scores(scores)
+print(f"Low: {low}  High: {high}  Avg: {avg}")
+
+# Simulate calling an AI API
+def build_prompt(task, context="", model="claude"):
+    """Build a structured AI prompt."""
+    prompt = f"Task: {task}"
+    if context:
+        prompt += f"\\nContext: {context}"
+    return {"model": model, "prompt": prompt, "max_tokens": 1000}
+
+req = build_prompt("Explain Python", "The user is a beginner")
+print(req)`,
+  chal:`Write a function called format_job_post(title, company, salary, remote=True) that returns a formatted string like: "Senior AI Engineer at Anthropic | $180,000 | Remote". Test it with 3 different jobs.`,
+  iv:["def defines a function — the body must be consistently indented below it","return sends a value back — a function without return gives you None","Default parameters must come AFTER required parameters in the function signature","Docstrings (triple quotes inside the function) document what it does — good practice interviewers notice"],
+  quiz:{q:"What keyword is used to define a function in Python?",opts:["function","func","def","define"],c:2,x:"def is short for 'define'. Python uses def my_function(): to create functions. This differs from JavaScript which uses 'function' keyword or arrow functions (=>)."}
+},
+{
+  id:8,title:"Dictionaries",sub:"Key-value data storage",tag:"Lesson 9 — Dictionaries",
+  concept:`<p>A <strong>dictionary</strong> stores <code>key: value</code> pairs in curly braces. Keys are usually strings, values can be anything — including lists or other dicts.</p>
+<ul>
+  <li><code>dict["key"]</code> — access a value (raises KeyError if missing)</li>
+  <li><code>dict.get("key", default)</code> — safe access (returns None or default if missing)</li>
+  <li><code>dict["key"] = value</code> — add or update a value</li>
+  <li><code>dict.keys()</code>, <code>dict.values()</code>, <code>dict.items()</code></li>
+  <li><code>"key" in dict</code> — check if key exists</li>
+  <li><code>del dict["key"]</code> — remove a key</li>
+</ul>
+<p>Dictionaries are like JSON — if you've worked with any web API, you've already seen this structure.</p>
+<div class="ai-call"><div class="ai-call-ttl">🤖 Why This Matters for AI</div><p>AI API responses come back as dictionaries (JSON). The messages you send to Claude or GPT-4 are dicts with "role" and "content" keys. Parsing AI outputs, storing model configs, tracking usage stats — all dictionaries.</p></div>`,
+  code:`# Creating a dictionary
+profile = {
+    "name": "Carlton Franks",
+    "role": "AI Specialist",
+    "skills": ["Python", "Prompt Engineering", "SQL"],
+    "years": 5,
+    "available": True
+}
+
+# Access values
+print(profile["name"])
+print(profile["role"])
+print(profile["skills"])
+
+# Safe access with .get()
+salary = profile.get("salary", "Not disclosed")
+print("Salary:", salary)
+
+# Add and update
+profile["location"] = "New York"
+profile["years"] = 6
+print("Years updated to:", profile["years"])
+
+# Loop through all key-value pairs
+print("\\nFull profile:")
+for key, value in profile.items():
+    print(f"  {key}: {value}")
+
+# Real AI API message structure (exactly this pattern)
+message = {
+    "role": "user",
+    "content": "Explain Python dictionaries in simple terms",
+}
+print("\\nAI message keys:", list(message.keys()))
+print("Content preview:", message["content"][:30])`,
+  chal:`Create a dictionary for a job posting with at least 5 keys: title, company, salary (int), required_skills (a list), and is_remote (bool). Then add an "applicants" key set to 0. Loop through all items and print them.`,
+  iv:["Dictionaries are O(1) for key lookups — much faster than searching a list","dict.get('key', default) is safer than dict['key'] — won't crash with KeyError","JSON maps directly to Python dicts — critical for any API or web integration work","dict.items() returns key-value pairs — this loop pattern appears in almost every real script"],
+  quiz:{q:"What method safely gets a dict value without raising an error if the key doesn't exist?",opts:["dict.find()","dict.fetch()","dict.get()","dict.value()"],c:2,x:"dict.get('key') returns None if the key doesn't exist, instead of throwing a KeyError like dict['key'] would. You can also provide a fallback: dict.get('key', 'default value')."}
+},
+{
+  id:9,title:"Python + AI Ecosystem",sub:"Where your skills meet real-world AI",tag:"Lesson 10 — Putting It Together",
+  concept:`<p>You've learned the building blocks. Here's exactly how they connect to the AI ecosystem:</p>
+<ul>
+  <li><strong>NumPy</strong>: Fast math on arrays — uses your variables, math, and loops knowledge</li>
+  <li><strong>Pandas</strong>: DataFrames (like spreadsheets in Python) — uses dicts, lists, and loops</li>
+  <li><strong>scikit-learn</strong>: Machine learning models — uses functions and data types</li>
+  <li><strong>Transformers (HuggingFace)</strong>: Run AI models locally</li>
+  <li><strong>Anthropic / OpenAI SDK</strong>: Call AI APIs — uses strings, dicts, functions, loops</li>
+</ul>
+<p>The code below simulates real AI API code using everything from the 9 lessons you just completed.</p>
+<div class="ai-call"><div class="ai-call-ttl">🤖 Real Code Preview</div><p>This exact pattern — building messages as dicts, calling a function, parsing the response — is what production AI engineering looks like. You now understand the Python behind it.</p></div>`,
+  code:`# Putting it all together: AI conversation tracker
+# Uses: dicts, lists, functions, loops, conditionals, strings
+
+def create_message(role, content):
+    """Build a message dict (the exact AI API format)."""
+    return {"role": role, "content": content}
+
+def count_tokens(text):
+    """Rough estimate: 1 token ≈ 4 characters."""
+    return len(text) // 4
+
+def analyze_chat(messages):
+    """Summarize conversation statistics."""
+    roles = [m["role"] for m in messages]
+    total_chars = sum(len(m["content"]) for m in messages)
+    return {
+        "user_msgs": roles.count("user"),
+        "ai_msgs": roles.count("assistant"),
+        "est_tokens": count_tokens("".join(m["content"] for m in messages))
+    }
+
+# Build a conversation (list of dicts — exactly like real APIs)
+chat = []
+chat.append(create_message("user", "What is Python used for in AI?"))
+chat.append(create_message("assistant", "Python is the primary language for AI due to its rich ecosystem including NumPy, Pandas, PyTorch, and APIs like Anthropic and OpenAI."))
+chat.append(create_message("user", "What should I learn first?"))
+chat.append(create_message("assistant", "Start with the basics: variables, loops, functions, and dicts. Then move to Pandas for data and the Anthropic SDK for AI."))
+
+# Display conversation
+print("=== Conversation History ===")
+for i, msg in enumerate(chat):
+    role = msg["role"].upper()
+    preview = msg["content"][:45]
+    print(f"{i+1}. [{role}]: {preview}...")
+
+# Stats
+stats = analyze_chat(chat)
+print(f"\\nStats: {stats['user_msgs']} user | {stats['ai_msgs']} AI | ~{stats['est_tokens']} tokens")
+
+# Routing logic
+if stats["est_tokens"] > 100:
+    print("Long conversation — consider summarizing")
+else:
+    print("Short conversation — context fits in one API call")`,
+  chal:`Add a function called get_last_user_message(messages) that loops through the messages list and returns the content of the most recent message where role == "user". Test it on the chat list.`,
+  iv:["Python dominates AI because of its readable syntax and library ecosystem — always mention this","pip install anthropic / pip install openai — two lines to start using AI APIs","Real AI code uses everything you learned: strings for prompts, dicts for messages, loops for batches, functions for organization","Mentioning you understand Python fundamentals AND AI API structure is a major differentiator in interviews"],
+  quiz:{q:"Which Python library is the primary tool for data manipulation in AI/ML workflows?",opts:["NumPy","Pandas","Requests","Flask"],c:1,x:"Pandas is the go-to library for data manipulation. DataFrames let you work with tabular data like a powerful spreadsheet in Python. Almost every AI/ML project uses Pandas to load, clean, and prepare data before feeding it to a model."}
+}
+];
+
+let current = 0;
+let done = new Set(JSON.parse(localStorage.getItem('pypath_done') || '[]'));
+
+// Dynamic Skulpt loader — tries jsdelivr first, cdnjs as fallback
+let _skulptPromise = null;
+
+function loadSkulpt() {
+  if (_skulptPromise) return _skulptPromise;
+  if (typeof Sk !== 'undefined') return Promise.resolve();
+  const BASES = [
+    'https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/',
+    'https://cdnjs.cloudflare.com/ajax/libs/skulpt/1.2.0/'
+  ];
+  function loadScript(src) {
+    return new Promise((res, rej) => {
+      const s = document.createElement('script');
+      s.src = src; s.onload = res; s.onerror = rej;
+      document.head.appendChild(s);
+    });
+  }
+  function tryBase(i) {
+    if (i >= BASES.length) return Promise.reject(new Error('All CDNs failed'));
+    const b = BASES[i];
+    return loadScript(b + 'skulpt.min.js')
+      .then(() => loadScript(b + 'skulpt-stdlib.js'))
+      .catch(() => tryBase(i + 1));
+  }
+  _skulptPromise = tryBase(0);
+  return _skulptPromise;
+}
+
+function runPy(code, outEl, onDone) {
+  let out = '';
+  function write(t) { out += t; }
+  function readLib(x) {
+    if (!Sk.builtinFiles || !Sk.builtinFiles.files[x]) throw "File not found: '" + x + "'";
+    return Sk.builtinFiles.files[x];
+  }
+  Sk.configure({ output: write, read: readLib });
+  Sk.misceval.asyncToPromise(() => Sk.importMainWithBody('<stdin>', false, code, true)).then(
+    () => { outEl.className = 'out-txt'; outEl.textContent = out || '(code ran with no output)'; if (onDone) onDone(); },
+    (err) => { outEl.className = 'out-txt err'; outEl.textContent = '⚠ ' + err.toString(); if (onDone) onDone(); }
+  );
+}
+
+async function runCode() {
+  const ta  = document.getElementById('codeEd');
+  const outEl = document.getElementById('outTxt');
+  const btn = document.getElementById('runBtn');
+  if (!ta || !outEl) return;
+  btn.textContent = '⏳ Loading...'; btn.className = 'run-btn busy';
+  outEl.className = 'out-txt empty'; outEl.textContent = '⏳ Loading Python engine...';
+  try {
+    await loadSkulpt();
+  } catch(e) {
+    outEl.className = 'out-txt err';
+    outEl.textContent = '⚠ Could not load Python engine — check your internet connection and try again.';
+    btn.textContent = '▶ Run'; btn.className = 'run-btn';
+    return;
+  }
+  btn.textContent = '⏳ Running...';
+  outEl.className = 'out-txt empty'; outEl.textContent = 'Running...';
+  runPy(ta.value, outEl, () => { btn.textContent = '▶ Run'; btn.className = 'run-btn'; });
+}
+
+function checkQ(chosen, correct, lessonId) {
+  const opts = document.querySelectorAll('.q-opt');
+  opts.forEach(o => { o.disabled = true; });
+  opts[correct].classList.add('correct');
+  if (chosen !== correct) opts[chosen].classList.add('wrong');
+  const exEl = document.getElementById('qExplain');
+  exEl.textContent = (chosen === correct ? '✓ Correct! ' : '✗ Not quite. ') + LESSONS[lessonId].quiz.x;
+  exEl.className = 'quiz-explain show';
+}
+
+function renderSB() {
+  document.getElementById('sidebar').innerHTML =
+    '<div class="sb-title">Curriculum</div>' +
+    LESSONS.map((l,i) => `<div class="sb-item${i===current?' active':''}${done.has(i)?' done':''}" onclick="go(${i})">
+      <div class="sb-num">${done.has(i)?'✓':i+1}</div>
+      <div class="sb-label">${l.title}</div>
+      <div class="sb-check">✓</div>
+    </div>`).join('');
+}
+
+function renderMob() {
+  document.getElementById('mobNav').innerHTML =
+    LESSONS.map((l,i) => `<div class="mob-item${i===current?' active':''}" onclick="go(${i})">${i+1}. ${l.title}</div>`).join('');
+}
+
+function updateProg() {
+  const pct = (done.size / LESSONS.length) * 100;
+  document.getElementById('pFill').style.width = pct + '%';
+  document.getElementById('lCtr').textContent = `${current+1} / ${LESSONS.length}`;
+}
+
+function renderLesson(idx) {
+  const l = LESSONS[idx];
+  const mc = document.getElementById('mainContent');
+  mc.innerHTML = `
+    <div class="l-hdr">
+      <div class="l-tag">${l.tag}</div>
+      <h1 class="l-title">${l.title}</h1>
+      <p class="l-sub">${l.sub}</p>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">Concept</div>
+      <div class="concept">${l.concept}</div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">Interactive Code Editor</div>
+      <div class="ed-box">
+        <div class="ed-bar">
+          <div class="ed-dots"><div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div></div>
+          <span class="ed-file">lesson_${idx+1}.py</span>
+          <button class="run-btn" id="runBtn" onclick="runCode()">▶ Run</button>
+        </div>
+        <textarea class="ed-ta" id="codeEd" spellcheck="false" autocorrect="off" autocapitalize="none">${l.code}</textarea>
+        <div class="out-box">
+          <div class="out-lbl">Output</div>
+          <div class="out-txt empty" id="outTxt">← Click Run to execute your code</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">Challenge</div>
+      <div class="chal">
+        <div class="chal-hdr">🎯 Try This</div>
+        <div class="chal-txt">${l.chal}</div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">Interview Ready</div>
+      <div class="iv-box">
+        <div class="iv-hdr">💼 What to Say in an Interview</div>
+        <ul class="iv-list">${l.iv.map(t=>`<li>${t}</li>`).join('')}</ul>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">Quick Quiz</div>
+      <div class="quiz-box">
+        <div class="quiz-q">${l.quiz.q}</div>
+        <div class="quiz-opts">${l.quiz.opts.map((o,i)=>`<button class="q-opt" onclick="checkQ(${i},${l.quiz.c},${idx})">${o}</button>`).join('')}</div>
+        <div class="quiz-explain" id="qExplain"></div>
+      </div>
+    </div>
+
+    <div class="l-nav">
+      ${idx>0?`<button class="btn-p" onclick="go(${idx-1})">← Previous</button>`:''}
+      ${idx<LESSONS.length-1
+        ?`<button class="btn-n" onclick="markDone(${idx})">Mark Complete &amp; Next →</button>`
+        :`<button class="btn-n" onclick="showDone()">🎉 Complete the Course!</button>`}
+    </div>`;
+
+  // Tab key support
+  const ta = document.getElementById('codeEd');
+  if (ta) ta.addEventListener('keydown', function(e) {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const s = this.selectionStart, end = this.selectionEnd;
+      this.value = this.value.substring(0,s) + '    ' + this.value.substring(end);
+      this.selectionStart = this.selectionEnd = s + 4;
+    }
+  });
+}
+
+function go(idx) {
+  current = idx;
+  renderLesson(idx); renderSB(); renderMob(); updateProg();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function markDone(idx) {
+  done.add(idx);
+  localStorage.setItem('pypath_done', JSON.stringify([...done]));
+  go(idx + 1);
+}
+
+function showDone() {
+  done.add(LESSONS.length - 1);
+  localStorage.setItem('pypath_done', JSON.stringify([...done]));
+  updateProg(); renderSB(); renderMob();
+  const mc = document.getElementById('mainContent');
+  mc.innerHTML = `
+    <div class="done-wrap">
+      <span class="done-emoji">🐍🎓</span>
+      <h1 class="done-title">Python Basics: Complete!</h1>
+      <p class="done-sub">You've covered the essentials — variables, strings, numbers, conditionals, lists, loops, functions, dictionaries, and how they power real AI development. You're ready to talk Python in any interview.</p>
+
+      <div class="iv-box" style="text-align:left;max-width:600px;margin:0 auto 1.75rem">
+        <div class="iv-hdr">💼 Your Interview Cheatsheet</div>
+        <ul class="iv-list">
+          <li>Python is dynamically typed, uses indentation for blocks, and is the #1 language for AI/ML</li>
+          <li>Core data types: str, int, float, bool, list, dict, tuple, set</li>
+          <li>def defines functions, return sends values back, import loads libraries</li>
+          <li>Key AI libraries: NumPy (math arrays), Pandas (data), scikit-learn (ML), Transformers (models)</li>
+          <li>AI APIs use dicts for messages: {"role": "user", "content": "your prompt here"}</li>
+          <li>Python is installed with pip — pip install anthropic or pip install openai gets you started</li>
+        </ul>
+      </div>
+
+      <div class="done-links">
+        <button class="done-btn pri" onclick="go(0)">↺ Review from Start</button>
+        <a class="done-btn sec" href="https://docs.python.org/3/tutorial/" target="_blank">Python Official Docs ↗</a>
+        <a class="done-btn sec" href="https://docs.anthropic.com" target="_blank">Anthropic API Docs ↗</a>
+        <a class="done-btn sec" href="https://www.kaggle.com/learn/python" target="_blank">Kaggle Python Course ↗</a>
+      </div>
+    </div>`;
+}
+
+function init() {
+  renderSB(); renderMob(); renderLesson(current); updateProg();
+  loadSkulpt().then(() => console.log('Python Academy: engine ready')).catch(() => {});
+}
+
+document.addEventListener('DOMContentLoaded', init);
+
+// © Carlton Franks | cfranks518@gmail.com | Python Academy
+</script>
+<footer class="footer">
+  <span class="footer-brand">🐍 Python Academy — Learn Python for the AI Era</span>
+  <span class="footer-copy">© Carlton Franks &nbsp;·&nbsp; <a href="mailto:cfranks518@gmail.com">cfranks518@gmail.com</a> &nbsp;·&nbsp; <a href="https://www.linkedin.com/in/carlton-franks-0ba56974/" target="_blank">LinkedIn</a></span>
+</footer>
+
+</body>
+</html>
