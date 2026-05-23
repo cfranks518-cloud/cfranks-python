@@ -30,6 +30,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .logo-text{background:linear-gradient(90deg,var(--green) 0%,var(--cyan) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .hdr-sub{font-size:0.72rem;color:var(--text3);font-weight:500;letter-spacing:0.03em}
 .hdr-right{margin-left:auto;display:flex;align-items:center;gap:0.85rem}
+.restart-btn{background:transparent;border:1px solid rgba(255,255,255,0.15);border-radius:7px;color:var(--text2);font-family:var(--font);font-size:0.65rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;padding:0.3rem 0.75rem;cursor:pointer;display:flex;align-items:center;gap:0.35rem;transition:all 0.18s;white-space:nowrap}
+.restart-btn:hover{border-color:var(--red);color:var(--red);background:rgba(239,83,80,0.07)}
 .lesson-ctr{font-size:0.75rem;color:var(--text2);white-space:nowrap;font-weight:500}
 .prog-wrap{width:160px}
 .prog-track{height:3px;background:var(--bg3);border-radius:2px;overflow:hidden}
@@ -173,6 +175,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   </div>
   <span class="hdr-sub">Learn Python for the AI Era</span>
   <div class="hdr-right">
+    <button class="restart-btn" onclick="restartCourse()" title="Reset all progress and return to Lesson 1">↺ Restart</button>
     <span class="lesson-ctr" id="lCtr">1 / 10</span>
     <div class="prog-wrap">
       <div class="prog-track"><div class="prog-fill" id="pFill"></div></div>
@@ -860,6 +863,13 @@ function showDone() {
         <a class="done-btn sec" href="https://www.kaggle.com/learn/python" target="_blank">Kaggle Python Course ↗</a>
       </div>
     </div>`;
+}
+
+function restartCourse() {
+  if (!confirm('Restart from Lesson 1? Your progress will be cleared.')) return;
+  done = new Set();
+  localStorage.removeItem('pypath_done');
+  go(0);
 }
 
 function init() {
